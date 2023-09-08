@@ -62,7 +62,7 @@ a { text-decoration: none;}
     #nav-bar::before{
         content: '';
         position: absolute;
-        bottom:-3.5%;
+        bottom:-2.5%;
         height: 22px;
         width: 22px;
         border-radius: 50%;

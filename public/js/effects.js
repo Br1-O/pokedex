@@ -1,3 +1,5 @@
+// Toggle function for type buttons in nav-bar
+
 const btnToggleTypes=document.getElementById('btn-toggle-types');
 const allTypeLists=document.querySelectorAll('.types');
 let typeListVisible= false;
@@ -20,3 +22,4 @@ btnToggleTypes.addEventListener('click', () => {
         btnToggleTypes.innerText='Show types';
     }
 })
+

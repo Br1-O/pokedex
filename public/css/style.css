@@ -8,89 +8,111 @@ blockquote:before,blockquote:after,q:before,q:after { content: ''; content: none
 table { border-collapse: collapse; border-spacing: 0;}
 a { text-decoration: none;}
 
-:root{
-    --electric:rgb(248, 248, 9);
-    --fire:rgb(244, 18, 18);
-    --aqua:rgb(37, 136, 242);
-    --grass:rgb(13, 184, 4);
-    --flying:rgb(238, 238, 235);
-    --ground:rgb(152, 64, 10);
-    --rock:rgb(80, 80, 67);
-    --metal:rgb(165, 171, 171);
-    --dragon:rgb(248, 125, 9);
-    --ice:rgb(73, 129, 202);
-    --normal:rgb(209, 209, 201);
-    --fighting:rgb(158, 29, 12);
-    --psychic:rgb(218, 50, 184);
-    --ghost:rgb(92, 11, 130);
-    --dark:rgb(18, 18, 17);
-    --bug:rgb(94, 203, 82);
-    --venom:rgb(69, 8, 139);
-    --fairy:rgb(189, 125, 211);
+/* variables */
 
-    --main-bg:rgb(247, 247, 247);
-    --second-bg:rgb(237, 16, 16);
+    :root{
+        --electric:rgb(248, 248, 9);
+        --fire:rgb(244, 18, 18);
+        --aqua:rgb(37, 136, 242);
+        --grass:rgb(13, 184, 4);
+        --flying:rgb(238, 238, 235);
+        --ground:rgb(152, 64, 10);
+        --rock:rgb(80, 80, 67);
+        --metal:rgb(165, 171, 171);
+        --dragon:rgb(248, 125, 9);
+        --ice:rgb(73, 129, 202);
+        --normal:rgb(209, 209, 201);
+        --fighting:rgb(158, 29, 12);
+        --psychic:rgb(218, 50, 184);
+        --ghost:rgb(92, 11, 130);
+        --dark:rgb(18, 18, 17);
+        --bug:rgb(94, 203, 82);
+        --venom:rgb(69, 8, 139);
+        --fairy:rgb(189, 125, 211);
+
+        --main-bg:rgb(247, 247, 247);
+        --second-bg:rgb(237, 16, 16);
+    }
+
+/* general styles */
+
+    body{
+        background-color: var(--main-bg);
+    }
+
+/* nav-bar */
+
+    #nav-bar{
+        position: relative;
+    }
+
+    #nav-bar::after{
+        content: '';
+        position: absolute;
+        right: 50%;
+        bottom:-7%;
+        height: 60px;
+        width: 60px;
+        border-radius: 50%;
+        border: 8px solid black;
+        background-color: var(--main-bg);
+        transform: translateY(20%);
+    }
+
+    #nav-bar::before{
+        content: '';
+        position: absolute;
+        bottom:-3.5%;
+        height: 22px;
+        width: 22px;
+        border-radius: 50%;
+        background-color: black;
+        z-index: 10;
+        transform: translate(-135%,14%);
+
+    }
+
+    #nav-bar:hover::before{
+        filter: brightness(1.2);
+        background-color: rgb(208, 24, 24);
+
+    }
+
+/* type button of nav-bar */
+
+    .type{
+        border: 2px solid white;
+        border-radius: 15px;
+        padding:10px;
+        margin: 5px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: 700;
+        color:rgb(5, 5, 5);
+        width: 100px;
+        transition: ease-in-out 0.2s;
+    }
+
+    .type:hover{
+        transform: scale(1.05);
+        margin: 0px 7px  ;
+        filter: brightness(1.2);
+    }
+
+/* search-bar */
+
+#search-input{
+    text-decoration: none;
+    border: none;
 }
 
-body{
-    background-color: var(--main-bg);
+#search-input:focus{
+    outline: none;
 }
 
-.type{
-    border: 2px solid white;
-    border-radius: 15px;
-    padding:10px;
-    margin: 5px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: 700;
-    color:rgb(5, 5, 5);
-    width: 100px;
-    transition: ease-in-out 0.2s;
-}
 
-.type:hover{
-    transform: scale(1.1);
-    margin: 0px 7px  ;
-    filter: brightness(1.2);
-}
 
-#nav-bar{
-    position: relative;
-}
-
-#nav-bar::after{
-    content: '';
-    position: absolute;
-    right: 50%;
-    bottom:-7%;
-    height: 60px;
-    width: 60px;
-    border-radius: 50%;
-    border: 8px solid black;
-    background-color: var(--main-bg);
-    transform: translateY(20%);
-}
-
-#nav-bar::before{
-    content: '';
-    position: absolute;
-    bottom:-3.5%;
-    height: 22px;
-    width: 22px;
-    border-radius: 50%;
-    background-color: black;
-    z-index: 10;
-    transform: translate(-135%,14%);
-
-}
-
-#nav-bar:hover::before{
-    filter: brightness(1.2);
-    background-color: rgb(208, 24, 24);
-
-}
 
 
 

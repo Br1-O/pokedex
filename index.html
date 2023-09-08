@@ -3,9 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../../public/css/style.css">
+    <link rel="stylesheet" href="public/css/style.css">
     <script src="https://cdn.tailwindcss.com"></script>    
-    <link rel="shortcut icon" href="../../public/img/pokedexFAV.png" type="image/x-icon">
+    <link rel="shortcut icon" href="public/img/pokedexFAV.png" type="image/x-icon">
     <title>PokeDex</title>
 </head>
 <body>
@@ -13,34 +13,36 @@
         <nav class="flex justify-around h-72 w-full p-4 bg-[var(--second-bg)] border-solid border-y-8 border-t-0 border-black" id="nav-bar">
 
             <div id="logo-container">
-                <img class="w-70 max-h-full" src="../../public/img/pokedex-icon.jpg" alt="logo pokedex">
+                <img class="w-70 max-h-full" src="public/img/pokedex-icon.jpg" alt="logo pokedex">
             </div>
 
             <div class="search-bar m-2 p-1 w-100">
                 <form class="m-1 p-2 w-full" action="#" method="get">
 
-                    <label class="rounded block m-1" for="search"> Search something!</label>
-                    <input class="rounded block m-1 w-full" type="search" name="search" id="">
+                    <label class="rounded block m-1 text-xl text-center" for="search"> Search something!</label>
+                    <input class="rounded block m-1 w-full p-2" type="search" name="search" id="search-input" placeholder="Type your search here..." autofocus>
 
                     <label for="pokemon"> Pokemon </label>
-                    <input type="radio" name="search-type" id="pokemon">
+                    <input type="radio" name="search-type" id="pokemon" value="pokemon" checked>
                     <label for="object"> Object </label>
-                    <input type="radio" name="search-type" id="object">
+                    <input type="radio" name="search-type" id="object" value="object">
                     <label for="trainer"> Trainer </label>
-                    <input type="radio" name="search-type" id="trainer">
+                    <input type="radio" name="search-type" id="trainer" value="trainer">
                     <label for="location"> Location </label>
-                    <input type="radio" name="search-type" id="location">
+                    <input type="radio" name="search-type" id="location" value="location">
 
-                    <button class="rounded m-2 p-2 bg-white block" type="submit"> Search </button>
+                    <button class="rounded m-2 p-2 bg-white inline" type="submit"> Search </button>
                 </form>
             </div>
 
-
             <ul class="flex flex-col" id="types-list">
 
-                <li class="type bg-[white] w-full"> All types </li>
-
                 <div class="flex justify-center items-center">
+                    <li class="type bg-[white] w-full" id="btn-all-types"> All types </li>
+                    <li class="type bg-[white] w-full" id="btn-toggle-types"> Show types </li>
+                </div>
+
+                <div class="types hidden justify-center items-center">
                     <li class="type bg-red bg-[var(--electric)]"> Electric </li>
                     <li class="type bg-[var(--fire)]"> Fire </li>
                     <li class="type bg-[var(--aqua)]"> Aqua </li>
@@ -49,7 +51,7 @@
                     <li class="type bg-[var(--psychic)]"> Psychic </li>
                 </div>
                 
-                <div class="flex justify-center items-center">
+                <div class="types hidden justify-center items-center">
                     <li class="type bg-[var(--bug)]"> Bug </li>
                     <li class="type bg-[var(--metal)]"> Metal </li>
                     <li class="type bg-[var(--dragon)]"> Dragon </li>
@@ -58,7 +60,7 @@
                     <li class="type bg-[var(--fairy)]"> Fairy </li>
                 </div>
 
-                <div class="flex justify-center items-center">                
+                <div class="types hidden justify-center items-center">                
                     <li class="type bg-[var(--ghost)] text-white"> Ghost </li>
                     <li class="type bg-[var(--dark)] text-white"> Dark </li>
                     <li class="type bg-[var(--ground)] text-white"> Ground </li>
@@ -67,6 +69,7 @@
                     <li class="type bg-[var(--fighting)] text-white"> Fighting </li>
                 </div>
             </ul>
+
         </nav>
     </header>
 
@@ -80,6 +83,9 @@
             </article>
         </section>
     </main>
-    
+
+    <script src="public/js/effects.js"></script>
+    <script src="public/js/fetch.js"></script>
+
 </body>
 </html>

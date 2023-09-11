@@ -13,7 +13,7 @@ a { text-decoration: none;}
     :root{
         --electric:rgb(248, 248, 9);
         --fire:rgb(244, 18, 18);
-        --aqua:rgb(37, 136, 242);
+        --water:rgb(37, 136, 242);
         --grass:rgb(13, 184, 4);
         --flying:rgb(238, 238, 235);
         --ground:rgb(152, 64, 10);
@@ -27,7 +27,7 @@ a { text-decoration: none;}
         --ghost:rgb(92, 11, 130);
         --dark:rgb(18, 18, 17);
         --bug:rgb(94, 203, 82);
-        --venom:rgb(69, 8, 139);
+        --poison:rgb(69, 8, 139);
         --fairy:rgb(189, 125, 211);
 
         --main-bg:rgb(247, 247, 247);
@@ -39,6 +39,11 @@ a { text-decoration: none;}
     body{
         background-color: var(--main-bg);
     }
+
+    input[type='radio'] {
+        accent-color: #000000;
+    }
+
 
 /* nav-bar */
 
@@ -111,7 +116,29 @@ a { text-decoration: none;}
     outline: none;
 }
 
+#search-title{
+    -webkit-text-stroke-color: rgb(26, 43, 192);
+    -webkit-text-stroke-width: 2px;
+}
 
+/*pokemon cards*/
+
+.pokemonCard{
+    isolation: isolate;
+}
+
+.pokemon-card-id-back{
+
+    position: absolute;
+    content:"#001";
+    color:rgb(220, 217, 217);
+    font-size:11rem;
+    font-weight: 700;
+    z-index: -1;
+    transform: translateX(-50%);
+    left: 45%;
+    top:0.25rem;
+}
 
 
 

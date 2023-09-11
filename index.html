@@ -3,9 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- CSS style file import -->
     <link rel="stylesheet" href="public/css/style.css">
+    <!-- TailwindCSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>    
+    <!-- FavIcon -->
     <link rel="shortcut icon" href="public/img/pokedexFAV.png" type="image/x-icon">
+    <!-- Tittle -->
     <title>PokeDex</title>
 </head>
 <body>
@@ -23,56 +27,91 @@
                     <label class="rounded block m-1 text-4xl text-center text-[var(--electric)] font-bold" id="search-title" for="search"> Search something!</label>
                     <input class="rounded block m-1 w-full p-2" type="search" name="search" id="search-input" placeholder="Type your search here..." autofocus>
 
-                    <label class="ml-1.5 text-white" for="pokemon"> Pokemon </label>
                     <input type="radio" name="search-type" id="pokemon" value="pokemon" checked>
-                    <label class="ml-1.5 text-white" for="move"> Move </label>
+                    <label class="mr-1 text-white" for="pokemon"> Pokemon </label>
                     <input type="radio" name="search-type" id="move" value="move">
-                    <label class="ml-1.5 text-white" for="object"> Object </label>
+                    <label class="mr-1 text-white" for="move"> Move </label>
                     <input type="radio" name="search-type" id="object" value="object">
-                    <label class="ml-1.5 text-white" for="trainer"> Trainer </label>
+                    <label class="mr-1 text-white" for="object"> Object </label>
                     <input type="radio" name="search-type" id="trainer" value="trainer">
-                    <label class="ml-1.5 text-white" for="location"> Location </label>
+                    <label class="mr-1 text-white" for="trainer"> Trainer </label>
                     <input type="radio" name="search-type" id="location" value="location">
+                    <label class="mr-1 text-white" for="location"> Location </label>
 
                     <button class="rounded m-2 p-2 bg-black inline text-white" type="submit"> Search </button>
                 </form>
             </div>
             <!--Display-bar-->
-            <ul class="flex flex-col w-full md:w-1/3 lg:w-1/3" id="types-list">
+            <div class="filter-bar flex flex-col w-full md:w-1/3 lg:w-1/3">
+                <!--Type-bar-->
+                <ul class="flex flex-col w-full" id="types-list">
 
-                <div class="flex justify-center items-center w-full">
-                    <li class="type bg-[white] w-full" id="btn-all-types"> All types </li>
-                    <li class="type bg-[white] w-full" id="btn-toggle-types"> Show types </li>
-                </div>
+                    <div class="flex justify-center items-center w-full">
+                        <li class="type bg-[white] w-full" id="btn-all-types"> All types </li>
+                        <li class="type bg-[white] w-full" id="btn-toggle-types"> Show types </li>
+                    </div>
 
-                <div class="types hidden justify-center items-center">
-                    <li class="type bg-red bg-[var(--electric)]"> Electric </li>
-                    <li class="type bg-[var(--fire)]"> Fire </li>
-                    <li class="type bg-[var(--aqua)]"> Aqua </li>
-                    <li class="type bg-[var(--grass)]"> Grass </li>
-                    <li class="type bg-[var(--flying)]"> Flying </li>
-                    <li class="type bg-[var(--psychic)]"> Psychic </li>
-                </div>
-                
-                <div class="types hidden justify-center items-center">
-                    <li class="type bg-[var(--bug)]"> Bug </li>
-                    <li class="type bg-[var(--metal)]"> Metal </li>
-                    <li class="type bg-[var(--dragon)]"> Dragon </li>
-                    <li class="type bg-[var(--ice)]"> Ice </li>
-                    <li class="type bg-[var(--normal)]"> Normal </li>
-                    <li class="type bg-[var(--fairy)]"> Fairy </li>
-                </div>
+                    <div class="types hidden justify-center items-center">
+                        <li class="type bg-red bg-[var(--electric)]"> Electric </li>
+                        <li class="type bg-[var(--fire)]"> Fire </li>
+                        <li class="type bg-[var(--aqua)]"> Aqua </li>
+                        <li class="type bg-[var(--grass)]"> Grass </li>
+                        <li class="type bg-[var(--flying)]"> Flying </li>
+                        <li class="type bg-[var(--psychic)]"> Psychic </li>
+                    </div>
+                    
+                    <div class="types hidden justify-center items-center">
+                        <li class="type bg-[var(--bug)]"> Bug </li>
+                        <li class="type bg-[var(--metal)]"> Metal </li>
+                        <li class="type bg-[var(--dragon)]"> Dragon </li>
+                        <li class="type bg-[var(--ice)]"> Ice </li>
+                        <li class="type bg-[var(--normal)]"> Normal </li>
+                        <li class="type bg-[var(--fairy)]"> Fairy </li>
+                    </div>
 
-                <div class="types hidden justify-center items-center">                
-                    <li class="type bg-[var(--ghost)] text-white"> Ghost </li>
-                    <li class="type bg-[var(--dark)] text-white"> Dark </li>
-                    <li class="type bg-[var(--ground)] text-white"> Ground </li>
-                    <li class="type bg-[var(--rock)] text-white"> Rock </li>
-                    <li class="type bg-[var(--venom)] text-white"> Venom </li>
-                    <li class="type bg-[var(--fighting)] text-white"> Fighting </li>
-                </div>
-            </ul>
+                    <div class="types hidden justify-center items-center">                
+                        <li class="type bg-[var(--ghost)] text-white"> Ghost </li>
+                        <li class="type bg-[var(--dark)] text-white"> Dark </li>
+                        <li class="type bg-[var(--ground)] text-white"> Ground </li>
+                        <li class="type bg-[var(--rock)] text-white"> Rock </li>
+                        <li class="type bg-[var(--venom)] text-white"> Venom </li>
+                        <li class="type bg-[var(--fighting)] text-white"> Fighting </li>
+                    </div>
+                </ul>
+                <!--Generation-bar-->
+                <div class="flex flex-row justify-center mt-8">
+                    <h2 class="text-2xl md:text-4xl text-white md:mr-5" >Generation:</h2>
+                    <div class="flex flex-col text-2xl text-white justify-evenly my-1  ml-5 flex-wrap items-center">
 
+                        <div class="flex">
+                            <input class="gen-filter ml-4 mr-7" type="radio" name="gen" id="all" value="all">                      
+                            <input class="gen-filter mr-7" type="radio" name="gen" id="1" value="1" checked>                         
+                            <input class="gen-filter mr-7" type="radio" name="gen" id="2" value="2">                         
+                            <input class="gen-filter mr-7" type="radio" name="gen" id="3" value="3">           
+                            <input class="gen-filter mr-7" type="radio" name="gen" id="4" value="4">                     
+                            <input class="gen-filter mr-7" type="radio" name="gen" id="5" value="5">                     
+                            <input class="gen-filter mr-7" type="radio" name="gen" id="6" value="6">      
+                            <input class="gen-filter mr-7" type="radio" name="gen" id="7" value="7">
+                            <input class="gen-filter mr-7" type="radio" name="gen" id="8" value="8">
+                            <input class="gen-filter mr-7" type="radio" name="gen" id="9" value="9">
+                        </div>
+    
+                        <div class="flex">
+                            <label class="mr-7" for="all">All</label>
+                            <label class="mr-7" for="1">1</label>
+                            <label class="mr-7" for="2">2</label>
+                            <label class="mr-7" for="3">3</label>
+                            <label class="mr-7" for="4">4</label>
+                            <label class="mr-7" for="5">5</label>
+                            <label class="mr-7" for="6">6</label>
+                            <label class="mr-7" for="7">7</label>
+                            <label class="mr-7" for="8">8</label>
+                            <label class="mr-7" for="9">9</label>
+                        </div>
+    
+                    </div>
+                </div>
+            </div>
         </nav>
     </header>
 
@@ -80,14 +119,13 @@
     <main class="m-10">
         <section id='display-list' class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4 justify-evenly items-center rounded bg-blue-200 p-2">
 
-
-   
         </section>
     </main>
 
     <!--Js Imports-->
     <script src="public/js/effects.js"></script>
-    <script src="public/js/fetch.js"></script>
+    <script type="module" src="public/js/fetch.js"></script>
+    <script type="module" src="public/js/search-filter.js"></script>
 
 </body>
 </html>

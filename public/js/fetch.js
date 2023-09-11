@@ -7,14 +7,14 @@ const catchEmAll = async (url) => {
 
 //Display fetch into cards
 
-const displayCards= async (url, amount) => {
+const displayCards= async (url, start, end) => {
     let item='';
     let body= '';
 
     //amount limits how much pokemon will be fetched and displayed
-    for (let i = 1; i < amount+1; i++) {
+    for (start; start < end; start++) {
         //concatenation of index to end of endpoint, so it fetch info of each pokemon
-        let urlEach=url+i;
+        let urlEach=url+start;
 
         item= await catchEmAll(urlEach);
 
@@ -36,8 +36,7 @@ const displayCards= async (url, amount) => {
         };
 
         //style of each card (the name.split and length check is because of some of the names delivered with extra words by the endpoint)
-        body+=`         
-        <a href="">
+        body+=`
             <article class="pokemonCard relative flex flex-col p-4 m-2 rounded bg-[var(--main-bg)] overflow-hidden items-center shadow-md shadow-black">
                 <p class="pokemon-card-id-back text-[14rem] sm:text-[8rem] md:text-[8rem] lg:text-[10rem]">#${id}</p>
                 <img class="min-w-[150px] min-h-[150px] w-2/3 h-1/3 shrink-0" src=${item.sprites.other['official-artwork'].front_default} alt="pokemon">
@@ -50,10 +49,9 @@ const displayCards= async (url, amount) => {
                 </div>
                 <div class="flex flex-row justify-evenly align-center p-2">
                     <p class="inline text-gray mx-4 bg-gray-200 rounded px-4 py-1">${(height*0.1).toFixed(2)} m</p>
-                    <p class="inline text-gray mx-4 bg-gray-200 rounded px-4 py-1">${weight/100} kg</p>
+                    <p class="inline text-gray mx-4 bg-gray-200 rounded px-4 py-1">${weight/10} kg</p>
                 </div>
             </article>
-        </a>
         `
     }
     //append of whole body containing cards into the container
@@ -65,4 +63,9 @@ const displayCards= async (url, amount) => {
 
 const url= "https://pokeapi.co/api/v2/pokemon/";
 
-displayCards(url, 1010);
+document.addEventListener("DOMContentLoaded", (event) => {
+    displayCards(url, 1, 152)
+});
+
+
+export {displayCards, url};

@@ -1,11 +1,12 @@
-// Toggle function for type buttons in nav-bar
+// Toggle visibility for type buttons in nav-bar
 
 const btnToggleTypes=document.getElementById('btn-toggle-types');
-const allTypeLists=document.querySelectorAll('.types');
-let typeListVisible= false;
 
 btnToggleTypes.addEventListener('click', () => {
 
+    const allTypeLists=document.querySelectorAll('.types');
+    let typeListVisible= false;
+    
     if (!typeListVisible) {
         allTypeLists.forEach( (typeList) => {
             typeList.classList.remove('hidden');
@@ -22,4 +23,3 @@ btnToggleTypes.addEventListener('click', () => {
         btnToggleTypes.innerText='Show types';
     }
 })
-

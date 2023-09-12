@@ -105,6 +105,28 @@ a { text-decoration: none;}
         filter: brightness(1.2);
     }
 
+/* type showAll button of nav-bar */
+
+.toggle{
+    border: 2px solid white;
+    border-radius: 15px;
+    padding:10px;
+    margin: 5px;
+    text-align: center;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 700;
+    color:rgb(5, 5, 5);
+    width: 100px;
+    transition: ease-in-out 0.2s;
+}
+
+.toggle:hover{
+    transform: scale(1.05);
+    margin: 0px 7px  ;
+    filter: brightness(1.2);
+}
+
 /* search-bar */
 
 #search-input{
@@ -124,12 +146,11 @@ a { text-decoration: none;}
 /*pokemon cards*/
 
 .pokemonCard{
-    isolation: isolate;
     cursor: pointer;
+    z-index: 1;
 }
 
 .pokemon-card-id-back{
-
     position: absolute;
     content:"#001";
     color:rgb(220, 217, 217);
@@ -140,11 +161,6 @@ a { text-decoration: none;}
     left: 45%;
     top:0.25rem;
 }
-
-
-
-
-
 
 
 

@@ -14,14 +14,14 @@
 </head>
 <body>
     <!--Nav-Bar-->
-    <header>
-        <nav class="flex flex-col md:flex-row lg:flex-row justify-around items-center h-50 w-full p-4 bg-[var(--second-bg)] border-solid border-y-8 border-t-0 border-black sticky top-0 z-900" id="nav-bar">
+    <header class="lg:sticky lg:top-0 lg:left-0 lg:z-[100]">
+        <nav class="flex flex-col md:flex-row lg:flex-row justify-around items-center h-50 w-full p-4 bg-[var(--second-bg)] border-solid border-y-8 border-t-0 border-black flex-wrap" id="nav-bar">
             <!--Img-logo-->
             <div id="logo-container w-full md:w-1/3 lg:w-1/3">
                 <img class="w-full max-h-full my-4" src="public/img/pokedex_logo.png" alt="logo pokedex">
             </div>
             <!--Search-bar-->
-            <div class="search-bar m-2 p-1 w-full md:w-1/3 lg:w-1/3">
+            <div class="search-bar m-2 p-1 w-full md:w-1/3 lg:w-1/3 flex-wrap">
                 <form class="m-1 p-2 w-full" action="#" method="get">
 
                     <label class="rounded block m-1 text-4xl text-center text-[var(--electric)] font-bold" id="search-title" for="search"> Search something!</label>
@@ -42,46 +42,46 @@
                 </form>
             </div>
             <!--Display-bar-->
-            <div class="filter-bar flex flex-col w-full md:w-1/3 lg:w-1/3">
+            <div class="filter-bar flex flex-col w-full md:w-1/3 lg:w-1/3 flex-wrap">
                 <!--Type-bar-->
-                <ul class="flex flex-col w-full" id="types-list">
+                <ul class="flex flex-col w-full flex-wrap" id="types-list">
 
                     <div class="flex justify-center items-center w-full">
-                        <li class="type bg-[white] w-full" id="btn-all-types"> All types </li>
-                        <li class="type bg-[white] w-full" id="btn-toggle-types"> Show types </li>
+                        <li data-type="all" class="type bg-[white] w-full" id="btn-all-types"> All types </li>
+                        <li class="toggle bg-[white] w-full" id="btn-toggle-types"> Show types </li>
                     </div>
 
                     <div class="types hidden justify-center items-center">
-                        <li class="type bg-red bg-[var(--electric)]"> Electric </li>
-                        <li class="type bg-[var(--fire)]"> Fire </li>
-                        <li class="type bg-[var(--aqua)]"> Aqua </li>
-                        <li class="type bg-[var(--grass)]"> Grass </li>
-                        <li class="type bg-[var(--flying)]"> Flying </li>
-                        <li class="type bg-[var(--psychic)]"> Psychic </li>
+                        <li data-type="electric" class="type bg-red bg-[var(--electric)]"> Electric </li>
+                        <li data-type="fire" class="type bg-[var(--fire)]"> Fire </li>
+                        <li data-type="water"  class="type bg-[var(--water)]"> Water </li>
+                        <li data-type="grass" class="type bg-[var(--grass)]"> Grass </li>
+                        <li data-type="flying" class="type bg-[var(--flying)]"> Flying </li>
+                        <li data-type="psychic" class="type bg-[var(--psychic)]"> Psychic </li>
                     </div>
                     
                     <div class="types hidden justify-center items-center">
-                        <li class="type bg-[var(--bug)]"> Bug </li>
-                        <li class="type bg-[var(--metal)]"> Metal </li>
-                        <li class="type bg-[var(--dragon)]"> Dragon </li>
-                        <li class="type bg-[var(--ice)]"> Ice </li>
-                        <li class="type bg-[var(--normal)]"> Normal </li>
-                        <li class="type bg-[var(--fairy)]"> Fairy </li>
+                        <li data-type="bug" class="type bg-[var(--bug)]"> Bug </li>
+                        <li data-type="metal" class="type bg-[var(--metal)]"> Metal </li>
+                        <li data-type="dragon" class="type bg-[var(--dragon)]"> Dragon </li>
+                        <li data-type="ice" class="type bg-[var(--ice)]"> Ice </li>
+                        <li data-type="normal" class="type bg-[var(--normal)]"> Normal </li>
+                        <li data-type="fairy" class="type bg-[var(--fairy)]"> Fairy </li>
                     </div>
 
                     <div class="types hidden justify-center items-center">                
-                        <li class="type bg-[var(--ghost)] text-white"> Ghost </li>
-                        <li class="type bg-[var(--dark)] text-white"> Dark </li>
-                        <li class="type bg-[var(--ground)] text-white"> Ground </li>
-                        <li class="type bg-[var(--rock)] text-white"> Rock </li>
-                        <li class="type bg-[var(--venom)] text-white"> Venom </li>
-                        <li class="type bg-[var(--fighting)] text-white"> Fighting </li>
+                        <li data-type="ghost" class="type bg-[var(--ghost)] text-white"> Ghost </li>
+                        <li data-type="dark" class="type bg-[var(--dark)] text-white"> Dark </li>
+                        <li data-type="ground" class="type bg-[var(--ground)] text-white"> Ground </li>
+                        <li data-type="rock" class="type bg-[var(--rock)] text-white"> Rock </li>
+                        <li data-type="poison" class="type bg-[var(--poison)] text-white"> Poison </li>
+                        <li data-type="fighting" class="type bg-[var(--fighting)] text-white"> Fighting </li>
                     </div>
                 </ul>
                 <!--Generation-bar-->
-                <div class="flex flex-row justify-center mt-8">
+                <div class="flex flex-row justify-center mt-8 flex-wrap">
                     <h2 class="text-2xl md:text-4xl text-white md:mr-5" >Generation:</h2>
-                    <div class="flex flex-col text-2xl text-white justify-evenly my-1  ml-5 flex-wrap items-center">
+                    <div class="flex flex-col text-2xl text-white justify-evenly my-1  ml-5 flex-wrap items-center flex-wrap">
 
                         <div class="flex">
                             <input class="gen-filter ml-4 mr-7" type="radio" name="gen" id="all" value="all">                      

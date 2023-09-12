@@ -42,6 +42,8 @@ const filterByCategory = async (fetchFunction,url,category,inputValues,start,end
 
 //■■■■■■■■■■■■■■■■■■■■■■■■■ function to displayIntoCards using a pre existing array of elements ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■//
 
+let type ='all';
+
 const displayPokemonQueryIntoCards = (array) => {
 
     let body= '';
@@ -101,50 +103,105 @@ allBtnType.forEach( (btn) => {
 
     if(btn.dataset.type!=="all"){
         btn.addEventListener('click', async () => {
-            let type=btn.dataset.type;
-            let q= await filterByCategory(catchEmAll, url, "types", type, 1, 1011);
+            //setting global variable type so gen radio btns eventListener can filter based on the selected type value
+            type=btn.dataset.type;
+            //filtering by category also paying attention to the gen number checked
+            let q= await filterByCategory(catchEmAll, url, "types", type, genCheckedValues()[0], genCheckedValues()[1]);
+            //instantiation of displaying query into cards
             displayPokemonQueryIntoCards(q);
-
         });
     }else{
         btn.addEventListener('click', async () => {
-            displayCards(url, 1, 1011);
+            type='all';
+            displayCards(url, genCheckedValues()[0], genCheckedValues()[1]);
         });
     }   
 });
 
 
-//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ filter function for generation filter ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■//
+//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ filter function for pokemon generation ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■//
 
 const allRadioGen=document.querySelectorAll('.gen-filter');
 
-const genChecked= () => {
+//function to return min and max index of pokemon in the gen selected
+function genCheckedValues() {
 
     if(allRadioGen[0].checked){
-            displayCards(url, 1, 1011);
+            return [1,1011];
         }else if(allRadioGen[1].checked){
-            displayCards(url, 1, 152);
+            return [1,152];
         }else if(allRadioGen[2].checked){
-            displayCards(url, 152, 252);
+            return [152,252];
         }else if(allRadioGen[3].checked){
-            displayCards(url, 252, 387);
+            return [252,387];
         }else if(allRadioGen[4].checked){
-            displayCards(url, 387, 494);
+            return [387,494];
         }else if(allRadioGen[5].checked){
-            displayCards(url, 494, 650);
+            return [494,650];
         }else if(allRadioGen[6].checked){
-            displayCards(url, 650, 722);
+            return [650,722];
         }else if(allRadioGen[7].checked){
-            displayCards(url, 722, 810);
+            return [722,810];
         }else if(allRadioGen[8].checked){
-            displayCards(url, 810, 906);
+            return [810,906];
         }else{
-            displayCards(url, 906, 1011);
+            return [906,1011];
         }
 };
-
+//eventListener for gen radio btn, also filtering based on type
 allRadioGen.forEach( (btn) => {
-    btn.addEventListener('click', () => {
-        genChecked();
-    });
+        btn.addEventListener('click', async () => {
+            if(type==="all"){
+                displayCards(url, (genCheckedValues())[0],(genCheckedValues())[1]);
+            }else{
+                let q= await filterByCategory(catchEmAll, url, "types", type, genCheckedValues()[0], genCheckedValues()[1]);
+                displayPokemonQueryIntoCards(q);
+            }
+        });
 });
+
+//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ Search by name function for search bar ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■//
+
+
+const searchInput=document.getElementById('search-input');
+
+const searchByName = async (url, inputValue, start, end) => {
+    let findItems=[];
+
+    for (start; start < end; start++){
+        let urlEach = url+start;
+        let item= await catchEmAll(urlEach);
+
+        //checking if inputValue is in name of pokemon
+        if ((item.name).includes(inputValue)) {
+            //push into array if so
+            findItems.push(JSON.stringify(item));
+        } 
+    };
+    return findItems;
+}
+
+//■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ Search function for search bar ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■//
+
+searchInput.addEventListener('keyup', async () => {
+    let inputValue= searchInput.value;
+    //search by ID (check if input is not empty and if it contains digits)
+    if((inputValue!=='') && /\d/.test(inputValue)){
+        displayCards(url,parseInt(inputValue),parseInt(inputValue)+1);
+
+    //search by name (check if input is not empty and if it contains letters)
+    }else if((inputValue!=='') && /.*/.test(inputValue)){
+        let q= await searchByName(url,inputValue,1,1011);
+        displayPokemonQueryIntoCards(q);
+    }else{
+        //if search input is empty it returns previous query display
+        if(type==="all"){
+            displayCards(url, (genCheckedValues())[0],(genCheckedValues())[1]);
+        }else{
+            let q= await filterByCategory(catchEmAll, url, "types", type, genCheckedValues()[0], genCheckedValues()[1]);
+            displayPokemonQueryIntoCards(q);
+        } 
+    }
+});
+
+

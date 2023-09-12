@@ -18,7 +18,7 @@ a { text-decoration: none;}
         --flying:rgb(238, 238, 235);
         --ground:rgb(152, 64, 10);
         --rock:rgb(80, 80, 67);
-        --metal:rgb(165, 171, 171);
+        --steel:rgb(165, 171, 171);
         --dragon:rgb(248, 125, 9);
         --ice:rgb(73, 129, 202);
         --normal:rgb(209, 209, 201);
@@ -35,6 +35,23 @@ a { text-decoration: none;}
     }
 
 /* general styles */
+
+    /* width */
+    ::-webkit-scrollbar {
+    width: 30px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: linear-gradient(to top, var(--main-bg) 70%, var(--second-bg));
+  }
+  
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background-image: url('../img/20250-9-pokeball-photo_16x16.ico');
+    background-repeat: no-repeat;
+    background-size:30px;
+  }
 
     body{
         background-color: var(--main-bg);
@@ -103,6 +120,10 @@ a { text-decoration: none;}
         transform: scale(1.05);
         margin: 0px 7px  ;
         filter: brightness(1.2);
+    }
+
+    .non-active{
+        filter: brightness(50%);
     }
 
 /* type showAll button of nav-bar */

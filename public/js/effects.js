@@ -14,6 +14,7 @@ btnToggleTypes.addEventListener('click', () => {
         });
         typeListVisible= true;
         btnToggleTypes.innerText='Hide types';
+        btnToggleTypes.title='Click to hide all types!'
     } else {
         allTypeLists.forEach( (typeList) => {
             typeList.classList.remove('flex');
@@ -21,5 +22,25 @@ btnToggleTypes.addEventListener('click', () => {
         });
         typeListVisible=false;
         btnToggleTypes.innerText='Show types';
+        btnToggleTypes.title='Click to show all types!'
     }
 })
+
+//■■■■■■■■■■■■■■■■■■■■ Toggle colors on click for type buttons in nav-bar ■■■■■■■■■■■■■■■■■■■//
+
+const typeBtns=document.querySelectorAll('.type');
+const typeList=document.getElementById('types-list');
+
+typeList.addEventListener('click', (event) => {
+    
+    typeBtns.forEach( (type) => {
+        if(type.contains(event.target)){
+            console.log(event.target);
+            type.addEventListener('click', () =>{
+                type.classList.add('non-active');
+            });
+        }else{
+            type.classList.remove('non-active');
+        }
+    })
+});

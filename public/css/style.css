@@ -36,23 +36,6 @@ a { text-decoration: none;}
 
 /* general styles */
 
-    /* width */
-    ::-webkit-scrollbar {
-    width: 30px;
-  }
-  
-  /* Track */
-  ::-webkit-scrollbar-track {
-    background: linear-gradient(to top, var(--main-bg) 70%, var(--second-bg));
-  }
-  
-  /* Handle */
-  ::-webkit-scrollbar-thumb {
-    background-image: url('../img/20250-9-pokeball-photo_16x16.ico');
-    background-repeat: no-repeat;
-    background-size:30px;
-  }
-
     body{
         background-color: var(--main-bg);
     }
@@ -171,6 +154,10 @@ a { text-decoration: none;}
     z-index: 1;
 }
 
+.pokemonCard:hover .pokemon-img{
+    transform: scale(1.2);
+}
+
 .pokemon-card-id-back{
     position: absolute;
     content:"#001";
@@ -183,5 +170,43 @@ a { text-decoration: none;}
     top:0.25rem;
 }
 
+/* Dialog Style */
+
+#dialogForItems{
+    transform: translate(-50%, -50%);
+}
+
+/*scroll-bar media-query*/
+
+@media screen and (max-height: 1020px){
+    :root {
+        -ms-overflow-style: none;  /* Internet Explorer 10+ */
+        scrollbar-width: none;  /* Firefox */
+    }
+    :root::-webkit-scrollbar { 
+        display: none;  /* Safari and Chrome */
+    }
+}    
+
+@media screen and (min-height:1020px){
+    /* width */
+    ::-webkit-scrollbar {
+        width: 30px;
+        position: relative;
+        top:40px;
+      }
+      
+    /* Track */
+    ::-webkit-scrollbar-track {
+    background: linear-gradient(to bottom, var(--second-bg) 0%, var(--second-bg) 19.90%, black 19.90%, black 20.70%, var(--main-bg) 20.70%, var(--main-bg) 100%);
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+    background-image: url('../img/20250-9-pokeball-photo_16x16.ico');
+    background-repeat: no-repeat;
+    background-size:30px;
+    }
+}
 
 

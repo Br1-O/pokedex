@@ -111,91 +111,91 @@ a { text-decoration: none;}
 
 /* type showAll button of nav-bar */
 
-.toggle{
-    border: 2px solid white;
-    border-radius: 15px;
-    padding:10px;
-    margin: 5px;
-    text-align: center;
-    cursor: pointer;
-    font-size: 20px;
-    font-weight: 700;
-    color:rgb(5, 5, 5);
-    width: 100px;
-    transition: ease-in-out 0.2s;
-}
+    .toggle{
+        border: 2px solid white;
+        border-radius: 15px;
+        padding:10px;
+        margin: 5px;
+        text-align: center;
+        cursor: pointer;
+        font-size: 20px;
+        font-weight: 700;
+        color:rgb(5, 5, 5);
+        width: 100px;
+        transition: ease-in-out 0.2s;
+    }
 
-.toggle:hover{
-    transform: scale(1.05);
-    margin: 0px 7px  ;
-    filter: brightness(1.2);
-}
+    .toggle:hover{
+        transform: scale(1.05);
+        margin: 0px 7px  ;
+        filter: brightness(1.2);
+    }
 
 /* search-bar */
 
-#search-input{
-    text-decoration: none;
-    border: none;
-}
+    #search-input{
+        text-decoration: none;
+        border: none;
+    }
 
-#search-input:focus{
-    outline: none;
-}
+    #search-input:focus{
+        outline: none;
+    }
 
-#search-title{
-    -webkit-text-stroke-color: rgb(26, 43, 192);
-    -webkit-text-stroke-width: 2px;
-}
+    #search-title{
+        -webkit-text-stroke-color: rgb(26, 43, 192);
+        -webkit-text-stroke-width: 2px;
+    }
 
 /*pokemon cards*/
 
-.pokemonCard{
-    cursor: pointer;
-    z-index: 1;
-}
+    .pokemonCard{
+        cursor: pointer;
+        z-index: 1;
+    }
 
-.pokemonCard:hover .pokemon-img{
-    transform: scale(1.2);
-}
+    .pokemonCard:hover .pokemon-img{
+        transform: scale(1.2);
+    }
 
-.pokemon-card-id-back{
-    position: absolute;
-    content:"#001";
-    color:rgb(220, 217, 217);
-    font-size:11rem;
-    font-weight: 700;
-    z-index: -1;
-    transform: translateX(-50%);
-    left: 45%;
-    top:0.25rem;
-}
+    .pokemon-card-id-back{
+        position: absolute;
+        content:"#001";
+        color:rgb(220, 217, 217);
+        font-size:11rem;
+        font-weight: 700;
+        z-index: -1;
+        transform: translateX(-50%);
+        left: 45%;
+        top:0.25rem;
+    }
 
 /* Dialog Style */
 
-#dialogForItems{
-    transform: translate(-50%, -50%);
-}
+    #dialogForItems{
+        transform: translate(-50%, -50%);
+    }
 
 /*scroll-bar media-query*/
 
-@media screen and (max-height: 1020px){
-    :root {
-        -ms-overflow-style: none;  /* Internet Explorer 10+ */
-        scrollbar-width: none;  /* Firefox */
-    }
-    :root::-webkit-scrollbar { 
-        display: none;  /* Safari and Chrome */
-    }
-}    
+    @media screen and (max-height: 1020px){
+        :root {
+            -ms-overflow-style: none;  /* Internet Explorer 10+ */
+            scrollbar-width: none;  /* Firefox */
+        }
+        :root::-webkit-scrollbar { 
+            display: none;  /* Safari and Chrome */
+        }
+    }    
 
-@media screen and (min-height:1020px){
-    /* width */
-    ::-webkit-scrollbar {
-        width: 30px;
-        position: relative;
-        top:40px;
-      }
-      
+    @media screen and (min-height:1020px){
+        /* width */
+        ::-webkit-scrollbar {
+            width: 30px;
+            position: relative;
+            top:40px;
+        }
+        
     /* Track */
     ::-webkit-scrollbar-track {
     background: linear-gradient(to bottom, var(--second-bg) 0%, var(--second-bg) 19.90%, black 19.90%, black 20.70%, var(--main-bg) 20.70%, var(--main-bg) 100%);

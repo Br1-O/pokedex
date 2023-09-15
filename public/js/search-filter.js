@@ -72,9 +72,9 @@ const displayPokemonQueryIntoCards = (array) => {
 
         //style of each card (the name.split and length check is because of some of the names delivered with extra words by the endpoint)
         body+=`
-            <article data-id="${item.id}" class="pokemonCard relative flex flex-col p-4 m-2 rounded bg-[var(--main-bg)] overflow-hidden items-center shadow-md shadow-black whitespace-nowrap z-1">
+            <article data-id="${item.id}" class="pokemonCard relative flex flex-col p-4 m-2 rounded bg-[var(--main-bg)] overflow-hidden items-center shadow-md shadow-black whitespace-nowrap z-1 hover:shadow-xl hover:shadow-[var(--${types[0].type.name})]">
                 <p class="pokemon-card-id-back text-[14rem] sm:text-[8rem] md:text-[8rem] lg:text-[10rem]">#${id}</p>
-                <img class="min-w-[150px] min-h-[150px] w-2/3 h-1/3 shrink-0" src=${item.sprites.other['official-artwork'].front_default} alt="pokemon">
+                <img class="pokemon-img min-w-[150px] min-h-[150px] w-2/3 h-1/3 shrink-0" src=${item.sprites.other['official-artwork'].front_default} alt="pokemon">
                 <div class="flex flex-row justify-center items-center overflow-hidden" data-id="${item.id}">
                     <h5 class="text-gray text-[0.9rem] bg-gray-200 rounded-l px-1 py-2 mr-2">#${id}</h5>
                     <h2 class="text-[2rem]">${name.split('-').length>1?(name.split('-'))[0] +' '+ (name.split('-'))[1]:name}</h2>

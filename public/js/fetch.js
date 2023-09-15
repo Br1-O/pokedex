@@ -68,7 +68,7 @@
 const url= "https://pokeapi.co/api/v2/pokemon/";
 
 document.addEventListener("DOMContentLoaded", () => {
-    displayCards(url, 1, 1011);
+    displayCards(url, 1, 152);
 });
 
 export {catchEmAll, displayCards, url, allFetchLoaded};

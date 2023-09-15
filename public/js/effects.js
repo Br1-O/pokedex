@@ -93,125 +93,165 @@ import {catchEmAll, url} from "./fetch.js";
     //function that returns string template for dialog body, parameters: base url and id for fetch into that url, given: "url/id" is endpoint for data
     async function dialogBody(url, idForFetch){
 
-        console.log('dialog body dispatched');
-
         let urlUnique = url+idForFetch;
         let item= await catchEmAll(urlUnique);
 
         let {name, id, height, weight, types} = item;
 
             //parse of id so it shows with "000" format
-            if ((id.toString()).length===1) {
-                id="00"+id;
-            } else if((id.toString()).length===2){
-                id="0"+id;
-            }
+                if ((id.toString()).length===1) {
+                    id="00"+id;
+                } else if((id.toString()).length===2){
+                    id="0"+id;
+                }
 
             //display of multiple types with appropiate background for each one
-            let typeNames='';
-            for (let i = 0; i < types.length; i++) {
+                let typeNames='';
+                for (let i = 0; i < types.length; i++) {
 
-                typeNames+=`<p class="inline m-2 bg-[var(--${types[i].type.name})] rounded p-2 text-[1.25rem] min-w-[5rem] text-center">${types[i].type.name}</p>`
-            };
+                    typeNames+=`<p class="inline m-2 bg-[var(--${types[i].type.name})] rounded p-2 text-[1.25rem] min-w-[5rem] text-center">${types[i].type.name}</p>`
+                };
 
-            //■■ check and fetch for "abilities" ■■
-            let abilitiesAll = item.abilities;
-            let abilitiesName = '';
+            //■■■■■■■■■■■■ check and fetch for "abilities" ■■■■■■■■■■■■■■//
 
-            abilitiesAll.forEach(ability => {
-                abilitiesName+= `<p class=" w-full text-gray ml-4 bg-gray-200 px-4 py-1">${ability.ability.name}</p>`
-            });
+                const abilitiesSection = async (abilitiesAll) => {
 
-            
+                    let abilitiesSection = `<h2 class="text-[2rem] m-2 mx-4"> Abilities: </h2>`;
+
+                    for (const ability of abilitiesAll){
+
+                        //fetch all data of each ability
+                        let abilityData=await catchEmAll(ability.ability.url);
+
+                        //display name
+                        abilitiesSection+= `
+                            <div class="flex min-w-full flex-col justify-center items-center py-3" title="${abilityData['flavor_text_entries'].length>0 ? abilityData['flavor_text_entries'][0]['flavor_text'] : ''}">
+                                <h3 class=" w-full text-gray text-lg text-center ml-4 bg-gray-200 px-4 py-1 font-bold">${abilityData.name}</h3>
+                                ${abilityData['effect_entries'].length>0 ? `<p class=" w-full text-gray ml-4 bg-gray-200 px-4 py-1"><strong>Effect:</strong> ${abilityData['effect_entries'][1].effect}</p>` : `<p class=" w-full text-center text-gray ml-4 bg-gray-200 px-4 py-1">No data available about effect!</p>`}
+                            </div>
+                        `; 
+
+                    };
+                    return abilitiesSection;
+                }
+
+            //■■■■■■■■■■■■ check and fetch for "moves" ■■■■■■■■■■■■■■//
+
+                const movesSection = async (movesAll) => {
+
+                    let movesSection = `<h2 class="text-[2rem] m-2 mx-4"> Moves: </h2>`;
+
+                    for (const move of movesAll){
+
+                        //fetch all data of each move
+                        let moveData=await catchEmAll(move.move.url);
+                        
+                        //check if move is learned by lvl up
+                        if (move['version_group_details'][0]['move_learn_method'].name==="level-up") {
+
+                            //display move if so
+                            movesSection+= `
+                                <div class="flex flex-col justify-center items-center py-3">
+                                    <h3 class=" min-w-[28rem] text-gray text-lg text-center ml-4 bg-gray-200 px-4 py-1 font-bold">${moveData.name}</h3>
+                                    <p class=" min-w-[28rem] text-gray ml-4 bg-gray-200 px-4 py-1"><strong>Learned at level:</strong> ${move['version_group_details'][0]['level_learned_at']} (${move['version_group_details'][0]['version_group'].name}) </p>
+                                </div>
+                            `; 
+                        } else {
+                            //display move in MO learned if not
+
+                        }
+
+                    };
+                    return movesSection;
+                }
+
 
         //■■■■■■ DIALOG BODY string template ■■■■■■// 
-        let dialogBody= `
-                <div class="flex flex-column overflow-y-auto">
+        let dialogBody= `    
+                    <div class="grid grid-cols-1 justify-start items-center md:grid-cols-3 md:justify-between md:items-baseline md:gap-4 w-full h-full overflow-y-scroll">
 
-                    <button id='closeModalForItems' class="fixed top-0 left-0"> [X] </button>
-                    
-                    <div class="flex flex-col md:flex-row items-center">
+                        <!--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COL NAME, CARROUSEL, TYPE AND W/H ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■-->
 
-                        <div class="flex flex-col">
-                          
-                            <div class="flex flex-row justify-center items-center">
-                                <h2 class="text-[5rem]">${name.split('-').length>1?(name.split('-'))[0] +' '+ (name.split('-'))[1]:name}</h2>
-                            </div>
+                            <div class="flex flex-col justify-start">
 
-                            <div data-id="${item.id}" class="relative flex flex-col p-4 m-2 rounded bg-[var(--main-bg)] items-center whitespace-nowrap z-1">
-                                                                
-                                <div class="relative min-w-[350px] min-h-[350px] mx-auto my-1">
+                                <button id='closeModalForItems' class="fixed top-0 left-0 z-10"> <img src="public/img/closeBtn.png" class="transition-all hover:saturate-200 hover:scale-[1.1] max-w-[2.5rem] m-[-1rem] h-auto"></img> </button>
 
-                                    <div class="slide relative p-4">
-                                        <img data-id="0" class="w-full h-[300px] pokemon-img min-w-[200px] min-h-[200px] shrink-0 m-3" src=${item.sprites.other['official-artwork'].front_default} alt="${name} no posee esta version de ilustracion">
-                                        <div class="legendDialogImg absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white"> Official art-work </div>
-                                    </div>
                             
-                                    <div class="slide relative p-4">
-                                        <img data-id="1" class="w-full h-[300px] pokemon-img min-w-[200px] min-h-[200px] shrink-0 m-3" src=${item.sprites.other['official-artwork'].front_shiny} alt="${name} no posee esta version de ilustracion">
-                                        <div class="legendDialogImg absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white"> Official art-work (shiny)</div>
-                                    </div>
-                            
-                                    <div class="slide relative p-4">
-                                        <img data-id="2" class="w-full h-[300px] pokemon-img min-w-[200px] min-h-[200px] shrink-0 m-3" src=${item.sprites.other['dream_world'].front_default} alt="${name} no posee esta version de ilustracion">
-                                        <div class="legendDialogImg absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white">Dream-World </div>
-                                    </div>
-
-                                    <div class="slide relative p-4">
-                                        <img data-id="3" class="w-full h-[300px] pokemon-img min-w-[200px] min-h-[200px] shrink-0 m-3" src=${item.sprites.other['home'].front_default} alt="${name} no posee esta version de ilustracion">
-                                        <div class="legendDialogImg absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white">Home </div>
-                                    </div>
-
-                                    <div class="slide relative p-4">
-                                        <img data-id="4" class="w-full h-[300px] pokemon-img min-w-[200px] min-h-[200px] shrink-0 m-3" src=${item.sprites.other['home'].front_shiny} alt="${name} no posee esta version de ilustracion">
-                                        <div class="legendDialogImg absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white">Home (shiny)</div>
-                                    </div>
-                            
-                                    <a id='carrousel-back' class="absolute left-0 top-1/2 p-4 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white hover:text-amber-500 cursor-pointer"
-                                        >❮</a>
-                            
-                                    <a id='carrousel-forward' class="absolute right-0 top-1/2 p-4 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white hover:text-amber-500 cursor-pointer"
-                                        >❯</a>
-                            
+                                <div class="flex flex-row justify-center items-center relative">
+                                    <h2 class="text-[5rem]">${name.split('-').length>1?(name.split('-'))[0] +' '+ (name.split('-'))[1]:name}</h2>
                                 </div>
-                                <br>
-                            
-                                <div class="flex justify-center items-center space-x-5 m-2">
-                                    <div class="dot w-4 h-4 rounded-full cursor-pointer"></div>
-                                    <div class="dot w-4 h-4 rounded-full cursor-pointer"></div>
-                                    <div class="dot w-4 h-4 rounded-full cursor-pointer"></div>
-                                    <div class="dot w-4 h-4 rounded-full cursor-pointer"></div>
-                                    <div class="dot w-4 h-4 rounded-full cursor-pointer"></div>
-                                </div>
+
+                                <div data-id="${item.id}" class="relative flex flex-col p-4 m-2 rounded bg-[var(--main-bg)] items-center whitespace-nowrap z-1">
+                                                                    
+                                    <div class="relative min-w-[350px] min-h-[350px] mx-auto my-1">
+
+                                        <div class="slide relative p-4">
+                                            <img data-id="0" class="w-full h-[300px] pokemon-img min-w-[200px] min-h-[200px] shrink-0 m-3" src=${item.sprites.other['official-artwork'].front_default} alt="${name} no posee esta version de ilustracion">
+                                            <div class="legendDialogImg absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white"> Official art-work </div>
+                                        </div>
                                 
+                                        <div class="slide relative p-4">
+                                            <img data-id="1" class="w-full h-[300px] pokemon-img min-w-[200px] min-h-[200px] shrink-0 m-3" src=${item.sprites.other['official-artwork'].front_shiny} alt="${name} no posee esta version de ilustracion">
+                                            <div class="legendDialogImg absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white"> Official art-work (shiny)</div>
+                                        </div>
                                 
-                                <div class="flex flex-row" data-id="${item.id}">
-                                    ${typeNames}
+                                        <div class="slide relative p-4">
+                                            <img data-id="2" class="w-full h-[300px] pokemon-img min-w-[200px] min-h-[200px] shrink-0 m-3" src=${item.sprites.other['dream_world'].front_default} alt="${name} no posee esta version de ilustracion">
+                                            <div class="legendDialogImg absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white">Dream-World </div>
+                                        </div>
+
+                                        <div class="slide relative p-4">
+                                            <img data-id="3" class="w-full h-[300px] pokemon-img min-w-[200px] min-h-[200px] shrink-0 m-3" src=${item.sprites.other['home'].front_default} alt="${name} no posee esta version de ilustracion">
+                                            <div class="legendDialogImg absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white">Home </div>
+                                        </div>
+
+                                        <div class="slide relative p-4">
+                                            <img data-id="4" class="w-full h-[300px] pokemon-img min-w-[200px] min-h-[200px] shrink-0 m-3" src=${item.sprites.other['home'].front_shiny} alt="${name} no posee esta version de ilustracion">
+                                            <div class="legendDialogImg absolute bottom-0 w-full px-5 py-3 bg-black/40 text-center text-white">Home (shiny)</div>
+                                        </div>
+                                
+                                        <a id='carrousel-back' class="absolute left-0 top-1/2 p-4 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white hover:text-amber-500 cursor-pointer"
+                                            >❮</a>
+                                
+                                        <a id='carrousel-forward' class="absolute right-0 top-1/2 p-4 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white hover:text-amber-500 cursor-pointer"
+                                            >❯</a>
+                                
+                                    </div>
+                                    <br>
+                                
+                                    <div class="flex justify-center items-center space-x-5 m-2">
+                                        <div class="dot w-4 h-4 rounded-full cursor-pointer"></div>
+                                        <div class="dot w-4 h-4 rounded-full cursor-pointer"></div>
+                                        <div class="dot w-4 h-4 rounded-full cursor-pointer"></div>
+                                        <div class="dot w-4 h-4 rounded-full cursor-pointer"></div>
+                                        <div class="dot w-4 h-4 rounded-full cursor-pointer"></div>
+                                    </div>
+                                    
+                                    
+                                    <div class="flex flex-row" data-id="${item.id}">
+                                        ${typeNames}
+                                    </div>
+
+                                </div>
+
+                                <div class="flex flex-row justify-evenly items-center py-3 overflow-none">
+                                    <p class="inline text-gray mx-4 bg-gray-200 rounded px-4 py-1">Height: ${(height*0.1).toFixed(2)} m</p>
+                                    <p class="inline text-gray mx-4 bg-gray-200 rounded px-4 py-1">Weight: ${weight/10} kg</p>
                                 </div>
 
                             </div>
 
-                            <div class="flex flex-row justify-evenly items-center py-3 overflow-none">
-                                <p class="inline text-gray mx-4 bg-gray-200 rounded px-4 py-1">Height: ${(height*0.1).toFixed(2)} m</p>
-                                <p class="inline text-gray mx-4 bg-gray-200 rounded px-4 py-1">Weight: ${weight/10} kg</p>
-                            </div>
-
-                        </div>
-
-                        <div class="flex flex-col justify-center items-center">
+                        <!--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COL ABILITIES AND STATS ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■-->
 
                             <div class="flex flex-col justify-evenly items-center py-3">
 
-                                <h2 class="text-[2rem] m-2 mx-4"> Abilities: </h2>
+                                <div class="flex flex-row justify-center items-center py-3 w-full">
 
-                                <div class="flex flex-row justify-center items-center py-3">
-
-                                    <div class="flex flex-col justify-center items-center py-3">
-                                        ${abilitiesName}
+                                    <div class="flex flex-col justify-center items-center">
+                                        ${await abilitiesSection(item.abilities)}
                                     </div>
 
                                 </div>
-
 
                                 <h2 class="text-[2rem] m-2 mx-4"> Base Stats: </h2>
 
@@ -239,42 +279,21 @@ import {catchEmAll, url} from "./fetch.js";
                             
                             </div>
 
-                            <div class="flex flex-col justify-evenly items-center py-3">
+                        <!--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COL MOVES ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■-->
+                           
+                            <div class="flex flex-col self-start items-center py-3 w-full">
 
-                                <h2 class="text-[2rem] m-2 mx-4"> Moves: </h2>
+                                <div class="flex flex-row justify-center items-center py-3 w-full">
 
-                                <div class="flex flex-row justify-center items-center py-3">
-
-                                    <div class="flex flex-col justify-center items-center py-3">
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.moves[0].move.name}</p>
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.moves[1].move.name}</p>
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.moves[2].move.name}</p>
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.moves[3].move.name}</p>
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.moves[4].move.name}</p>
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.moves[5].move.name}</p>
-                                    </div>
-
-                                    <div class="flex flex-col justify-center items-center py-3">
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[0].base_stat} </p>
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[1].base_stat} </p>
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[2].base_stat} </p>
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[3].base_stat} </p>
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[4].base_stat} </p>
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[5].base_stat} </p>
+                                    <div class="flex flex-col justify-center items-center w-full">
+                                        ${await movesSection(item.moves)}
                                     </div>
 
                                 </div>
+                                
                             </div>
-                        
-                        </div>
-
-                        </div>
-
-
 
                     </div>
-
-                </div>
         `;
 
         //box-shadow for dialog
@@ -364,7 +383,7 @@ document.addEventListener("dialogOpenedEvent", ()=> {
             let i = parseInt(imgNotLoading.dataset.id);
 
             imgNotLoading.src = "public/img/pikasadface.png";
-            legendDialogImg[i].innerHTML += `<br> (¡Este pokemon no posee esta ilustracion!)`;
+            legendDialogImg[i].innerHTML += `<br> (Not available for this Pokemon!)`;
         
             // Remove the error event listener using the named function
             imgNotLoading.removeEventListener('error', handleImageError);

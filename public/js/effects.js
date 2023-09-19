@@ -1,5 +1,32 @@
 import {catchEmAll, url} from "./fetch.js";
 
+//■■■■■■■■■■■■ Accordion function ■■■■■■■■■■■■■■//
+
+    function toggleAccordion(id) {
+        const element = document.getElementById(id);
+
+        if (element.classList.contains("hidden")) {
+            element.classList.remove("hidden");
+        } else {
+            element.classList.add("hidden");
+        }
+    }
+
+//■■■■■■■■■■■■■■■■■■■■ Loading Screen Animation ■■■■■■■■■■■■■■■■■■■//
+
+export const loadingScreen = (isLoading,container,extraButtons='') => {
+        //Loading Animation
+        if(isLoading){
+            container.innerHTML=`
+            ${extraButtons}                    
+            <div class="absolute top-2/3 left-1/2 traslate-y-1/2 traslate-x-1/2">
+                <div class="pokeball" title='This pokemon is resisting! When captured its data will be shown!'>
+                    <div class="pokeball__button"></div>
+                </div>
+            </div>`;
+        }
+    }
+
 //■■■■■■■■■■■■■■■■■■■■ Toggle visibility for type buttons in nav-bar ■■■■■■■■■■■■■■■■■■■//
 
     const btnToggleTypes=document.getElementById('btn-toggle-types');
@@ -53,40 +80,128 @@ import {catchEmAll, url} from "./fetch.js";
 
     const openDialog = (dialog) =>{
         dialog.show();    
-        console.log('dialog open');
+        dialog.focus();
     }
 
     const closeDialog = (dialog) =>{
         dialog.close();
-        console.log('dialog close');
     }
 
 //■■■■■■■■■■■■■■■■■■■■ Dialog style and open Dialog window on click over pokemon ■■■■■■■■■■■■■■■■■■■//
 
+    let dialogLoading=true;
+
     //function to assign an event click for items in a iterable that open a dialog with a body assign through a callback function
-    const dialogForItems = (iterableToAssignDialogEvent, dialogBody) => {
+    const dialogForItems = (containerOfList, dialogBody) => {
+    
+        containerOfList.addEventListener('click', (event) => {
 
-        iterableToAssignDialogEvent.forEach(item => {
-            item.addEventListener('click', async (event) => {
+            let dialogLoading=true;
 
-                //openDialog fx
-                openDialog(dialogWindow);
-                dialogOpened=true;
+            if (event.target.parentNode.classList.contains('pokemonCard') || event.target.classList.contains('pokemonCard')) {
 
-                //assign id of card into callback fx for string template body for dialog to fetch all data                
-                dialogWindow.innerHTML= await dialogBody(url, (event.target.parentNode).dataset.id);
+                event.target.addEventListener('click', async (event) => {
 
-                const dialogOpenedEvent = new Event('dialogOpenedEvent');
-                document.dispatchEvent(dialogOpenedEvent);
+                    //openDialog fx
+                    openDialog(dialogWindow);
+                    dialogOpened=true;
+    
+                    //assign id of card into callback fx for string template body for dialog to fetch all data                
+                    dialogWindow.innerHTML= await dialogBody(url, (event.target.parentNode).dataset.id);
+    
+                    dialogLoading=false;
+    
+                    const dialogOpenedEvent = new Event('dialogOpenedEvent');
+                    document.dispatchEvent(dialogOpenedEvent);
+    
+                    //■■■■ close button function for dialog body ■■■■//
+                    const closeButton = document.getElementById('closeModalForItems');
+                    closeButton.addEventListener('click', () => {
+                        closeDialog(dialogWindow);
+                        dialogOpened=false;
+                    });
 
-                //close button function for dialog body
-                const closeButton = document.getElementById('closeModalForItems');
-                closeButton.addEventListener('click', () => {
-                    closeDialog(dialogWindow);
-                    dialogOpened=false;
+                    //■■■■ close function when 'Esc' is pressed for dialog ■■■■//
+                    dialogWindow.addEventListener('keydown', (event) => {
+                        if (event.key === 'Escape') {
+                            closeDialog(dialogWindow);
+                            dialogOpened=false;
+                        }
+                    });
+
+                    //■■■■ Accordion functionality for dialog sections ■■■■/
+
+                        //abilities section
+                        const abilitiesTitle=document.getElementById('abilitiesTitle');
+                        abilitiesTitle.addEventListener('click', () => {
+
+                            if(abilitiesContent.classList.contains('hidden')){
+                                abilitiesTitle.innerHTML=`<h2 id='abilitiesTitle' class="text-[2rem] m-2 mx-4 cursor-pointer ease-in"> &#x21E9 Abilities: </h2>`; 
+                                toggleAccordion('abilitiesContent');
+                            }else{
+                                abilitiesTitle.innerHTML=`<h2 id='abilitiesTitle' class="text-[2rem] m-2 mx-4 cursor-pointer ease-in"> &#x21E8 Abilities: </h2>`; 
+                                toggleAccordion('abilitiesContent');
+                            }
+
+                        });
+
+                        //moves section
+                        const movesTitleLevel=document.getElementById('movesTitleLevel');
+                        movesTitleLevel.addEventListener('click', () => {
+                            
+                            if(movesContentLevel.classList.contains('hidden')){
+                                movesTitleLevel.innerHTML=`<h2 id='movesTitlelevel' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E9 Moves (by Level): </h2>`; 
+                                toggleAccordion('movesContentLevel');
+                            }else{
+                                movesTitleLevel.innerHTML=`<h2 id='movesTitleLevel' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E8 Moves (by Level): </h2>`; 
+                                toggleAccordion('movesContentLevel');
+                            }
+                        });
+                        //moves section
+                        const movesTitleMachine=document.getElementById('movesTitleMachine');
+                        movesTitleMachine.addEventListener('click', () => {
+
+                            if(movesContentMachine.classList.contains('hidden')){
+                                movesTitleMachine.innerHTML=`<h2 id='movesTitleMachine' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E9 Moves (by MT/MO): </h2>`; 
+                                toggleAccordion('movesContentMachine');
+                            }else{
+                                movesTitleMachine.innerHTML=`<h2 id='movesTitleMachine' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E8 Moves (by MT/MO): </h2>`; 
+                                toggleAccordion('movesContentMachine');
+                            }
+
+                        });
+
+                        //moves section
+                        const movesTitleEgg=document.getElementById('movesTitleEgg');
+                        movesTitleEgg.addEventListener('click', () => {
+                            
+                            if(movesContentEgg.classList.contains('hidden')){
+                                movesTitleEgg.innerHTML=`<h2 id='movesTitleEgg' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E9 Moves (by Egg): </h2>`; 
+                                toggleAccordion('movesContentEgg');
+                            }else{
+                                movesTitleEgg.innerHTML=`<h2 id='movesTitleEgg' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E8 Moves (by Egg): </h2>`; 
+                                toggleAccordion('movesContentEgg');
+                            }
+
+                        });
+
+                        //moves section
+                        const movesTitleTutor=document.getElementById('movesTitleTutor');
+                        movesTitleTutor.addEventListener('click', () => {
+                            
+                            if(movesContentTutor.classList.contains('hidden')){
+                                movesTitleTutor.innerHTML=`<h2 id='movesTitleTutor' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E9 Moves (by Tutor): </h2>`; 
+                                toggleAccordion('movesContentTutor');
+                            }else{
+                                movesTitleTutor.innerHTML=`<h2 id='movesTitleTutor>' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E8 Moves (by Tutor): </h2>`; 
+                                toggleAccordion('movesContentTutor');
+                            }
+
+                        });
+
                 });
-
-            });
+            }
+            
         });
     }
     
@@ -96,6 +211,17 @@ import {catchEmAll, url} from "./fetch.js";
         let urlUnique = url+idForFetch;
         let item= await catchEmAll(urlUnique);
 
+        loadingScreen(dialogLoading, dialogWindow, 
+        `<button id='closeModalForItems' class="fixed top-0 left-0 z-10"> <img src="public/img/closeBtn.png" class="hover:animate-pulse transition-all hover:saturate-200 hover:scale-[1.1] max-w-[2.5rem] m-[-1rem] h-auto"></img> </button>
+        `);
+
+            //close button function for dialog body
+            const closeButton = document.getElementById('closeModalForItems');
+            closeButton.addEventListener('click', () => {
+                closeDialog(dialogWindow);
+                dialogOpened=false;
+            });
+              
         let {name, id, height, weight, types} = item;
 
             //parse of id so it shows with "000" format
@@ -112,34 +238,55 @@ import {catchEmAll, url} from "./fetch.js";
                     typeNames+=`<p class="inline m-2 bg-[var(--${types[i].type.name})] rounded p-2 text-[1.25rem] min-w-[5rem] text-center">${types[i].type.name}</p>`
                 };
 
+
             //■■■■■■■■■■■■ check and fetch for "abilities" ■■■■■■■■■■■■■■//
 
-                const abilitiesSection = async (abilitiesAll) => {
+                async function abilitiesSection(abilitiesAll){
 
-                    let abilitiesSection = `<h2 class="text-[2rem] m-2 mx-4"> Abilities: </h2>`;
+                    //check if ability is repeated
+                    let abilities=[];
+                    abilitiesAll.forEach((ability,i) => {
+                        if (abilities.length===0) {
+                            abilities.push(ability);
+                        }else{
+                            if (!(abilities[i-1].ability.name===ability.ability.name)) {
+                                abilities.push(ability);
+                            }
+                        }
+                    });
 
-                    for (const ability of abilitiesAll){
+                    let abilitiesSection = '';
+
+                    for (const ability of abilities){
 
                         //fetch all data of each ability
                         let abilityData=await catchEmAll(ability.ability.url);
 
                         //display name
                         abilitiesSection+= `
-                            <div class="flex min-w-full flex-col justify-center items-center py-3" title="${abilityData['flavor_text_entries'].length>0 ? abilityData['flavor_text_entries'][0]['flavor_text'] : ''}">
-                                <h3 class=" w-full text-gray text-lg text-center ml-4 bg-gray-200 px-4 py-1 font-bold">${abilityData.name}</h3>
-                                ${abilityData['effect_entries'].length>0 ? `<p class=" w-full text-gray ml-4 bg-gray-200 px-4 py-1"><strong>Effect:</strong> ${abilityData['effect_entries'][1].effect}</p>` : `<p class=" w-full text-center text-gray ml-4 bg-gray-200 px-4 py-1">No data available about effect!</p>`}
+                            <div class="flex min-w-full flex-col justify-center items-center m-1 rounded border-black border-solid border-2" title="${abilityData['flavor_text_entries'].length>0 ? abilityData['flavor_text_entries'][0]['flavor_text'] : ''}">
+                                <h3 class=" w-full text-gray text-lg text-center bg-[var(--second-bg)] px-4 py-1 font-bold border-black border-solid border-b-2">${abilityData.name}</h3>
+                                ${abilityData['effect_entries'].length>='2' ? 
+                                `<p class=" w-full text-gray bg-gray-200 px-4 py-1"><strong>Effect:</strong> ${abilityData['effect_entries'][1].effect}</p>` : 
+                                abilityData['effect_entries'].length=='1' ? 
+                                `<p class=" w-full text-gray bg-gray-200 px-4 py-1"><strong>Effect:</strong> ${abilityData['effect_entries'][0].effect}</p>` : 
+                                `<p class=" w-full text-center text-gray bg-gray-200 px-4 py-1">No data available about effect!</p>`}
                             </div>
                         `; 
 
                     };
                     return abilitiesSection;
                 }
+                
 
             //■■■■■■■■■■■■ check and fetch for "moves" ■■■■■■■■■■■■■■//
 
                 const movesSection = async (movesAll) => {
 
-                    let movesSection = `<h2 class="text-[2rem] m-2 mx-4"> Moves: </h2>`;
+                    let movesSection = '';
+                    let movesSectionMachine = '';
+                    let movesSectionEgg = '';
+                    let movesSectionTutor = '';
 
                     for (const move of movesAll){
 
@@ -151,34 +298,55 @@ import {catchEmAll, url} from "./fetch.js";
 
                             //display move if so
                             movesSection+= `
-                                <div class="flex flex-col justify-center items-center py-3">
-                                    <h3 class=" min-w-[28rem] text-gray text-lg text-center ml-4 bg-gray-200 px-4 py-1 font-bold">${moveData.name}</h3>
-                                    <p class=" min-w-[28rem] text-gray ml-4 bg-gray-200 px-4 py-1"><strong>Learned at level:</strong> ${move['version_group_details'][0]['level_learned_at']} (${move['version_group_details'][0]['version_group'].name}) </p>
+                                <div class="flex flex-col justify-center items-center py-3 m-1 bg-[var(--${moveData.type.name})] rounded border-black border-solid border-2" title='Power: ${moveData.power ? moveData.power : 'non-dmg'} | PP: ${moveData.pp} | Accuracy: ${moveData.accuracy ? moveData.accuracy : 'none'}'>
+                                    <h3 class=" min-w-[11.5rem] text-gray text-lg text-center px-4 py-1 font-bold border-black border-solid border-b-2">${moveData.name}</h3>
+                                    <p class=" min-w-[11.5rem] text-gray text-center px-4 py-1"><strong>Learned at level:</strong> </br><strong>${move['version_group_details'][0]['level_learned_at']}</strong> (${move['version_group_details'][0]['version_group'].name}) </p>
                                 </div>
                             `; 
-                        } else {
-                            //display move in MO learned if not
-
+                        } else if (move['version_group_details'][0]['move_learn_method'].name==="machine") {
+                            //display move in MO moves if not
+                            movesSectionMachine+= `
+                                <div class="flex flex-col justify-center items-center py-3 m-1 bg-[var(--${moveData.type.name})] rounded border-black border-solid border-2" title='Power: ${moveData.power ? moveData.power : 'non-dmg'} | PP: ${moveData.pp} | Accuracy: ${moveData.accuracy ? moveData.accuracy : 'none'}'>
+                                    <h3 class=" min-w-[11.5rem] text-gray text-lg text-center px-4 py-1 font-bold border-black border-solid border-b-2">${moveData.name}</h3>
+                                    <p class=" min-w-[11.5rem] text-gray text-center px-4 py-1"><strong>Learned at level:</strong> </br><strong>${move['version_group_details'][0]['level_learned_at']}</strong> (${move['version_group_details'][0]['version_group'].name}) </p>
+                                </div>
+                            `; 
+                        }else if  (move['version_group_details'][0]['move_learn_method'].name==="egg"){
+                            //display move in egg moves if not
+                            movesSectionEgg+= `
+                                <div class="flex flex-col justify-center items-center py-3 m-1 bg-[var(--${moveData.type.name})] rounded border-black border-solid border-2" title='Power: ${moveData.power ? moveData.power : 'non-dmg'} | PP: ${moveData.pp} | Accuracy: ${moveData.accuracy ? moveData.accuracy : 'none'}'>
+                                    <h3 class=" min-w-[11.5rem] text-gray text-lg text-center px-4 py-1 font-bold border-black border-solid border-b-2">${moveData.name}</h3>
+                                    <p class=" min-w-[11.5rem] text-gray text-center px-4 py-1"><strong>Learned at level:</strong> </br><strong>${move['version_group_details'][0]['level_learned_at']}</strong> (${move['version_group_details'][0]['version_group'].name}) </p>
+                                </div>
+                            `; 
+                        }else if  (move['version_group_details'][0]['move_learn_method'].name==="tutor"){
+                            //display move in tutor moves if not
+                            movesSectionTutor+= `
+                                <div class="flex flex-col justify-center items-center py-3 m-1 bg-[var(--${moveData.type.name})] rounded border-black border-solid border-2" title='Power: ${moveData.power ? moveData.power : 'non-dmg'} | PP: ${moveData.pp} | Accuracy: ${moveData.accuracy ? moveData.accuracy : 'none'}'>
+                                    <h3 class=" min-w-[11.5rem] text-gray text-lg text-center px-4 py-1 font-bold border-black border-solid border-b-2">${moveData.name}</h3>
+                                    <p class=" min-w-[11.5rem] text-gray text-center px-4 py-1"><strong>Learned at level:</strong> </br><strong>${move['version_group_details'][0]['level_learned_at']}</strong> (${move['version_group_details'][0]['version_group'].name}) </p>
+                                </div>
+                            `; 
                         }
-
                     };
-                    return movesSection;
+
+                    let allMovesSection=[movesSection,movesSectionMachine,movesSectionEgg,movesSectionTutor];
+                    return allMovesSection;
                 }
 
 
         //■■■■■■ DIALOG BODY string template ■■■■■■// 
         let dialogBody= `    
-                    <div class="grid grid-cols-1 justify-start items-center md:grid-cols-3 md:justify-between md:items-baseline md:gap-4 w-full h-full overflow-y-scroll">
+                    <div class="grid grid-cols-1 justify-start items-center md:grid-cols-3 md:justify-between md:items-baseline md:gap-4 w-full h-full overflow-y-auto">
 
-                        <!--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COL NAME, CARROUSEL, TYPE AND W/H ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■-->
+                        <!--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COL NAME, CARROUSEL, TYPE AND STATS ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■-->
 
                             <div class="flex flex-col justify-start">
 
-                                <button id='closeModalForItems' class="fixed top-0 left-0 z-10"> <img src="public/img/closeBtn.png" class="transition-all hover:saturate-200 hover:scale-[1.1] max-w-[2.5rem] m-[-1rem] h-auto"></img> </button>
+                                <button id='closeModalForItems' class="fixed top-0 left-0 z-10"> <img src="public/img/closeBtn.png" class="hover:animate-pulse transition-all hover:saturate-200 hover:scale-[1.1] max-w-[2.5rem] m-[-1rem] h-auto"></img> </button>
 
-                            
                                 <div class="flex flex-row justify-center items-center relative">
-                                    <h2 class="text-[5rem]">${name.split('-').length>1?(name.split('-'))[0] +' '+ (name.split('-'))[1]:name}</h2>
+                                    <h2 class="text-[5rem] font-bold text-[var(--${types[0].type.name})] ${types.length>1 ? `hover:text-[var(--${types[1].type.name})]` : ''}">${name.split('-').length>1?(name.split('-'))[0] +' '+ (name.split('-'))[1]:name}</h2>
                                 </div>
 
                                 <div data-id="${item.id}" class="relative flex flex-col p-4 m-2 rounded bg-[var(--main-bg)] items-center whitespace-nowrap z-1">
@@ -211,7 +379,7 @@ import {catchEmAll, url} from "./fetch.js";
                                         </div>
                                 
                                         <a id='carrousel-back' class="absolute left-0 top-1/2 p-4 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white hover:text-amber-500 cursor-pointer"
-                                            >❮</a>
+                                        >❮</a>
                                 
                                         <a id='carrousel-forward' class="absolute right-0 top-1/2 p-4 -translate-y-1/2 bg-black/30 hover:bg-black/50 text-white hover:text-amber-500 cursor-pointer"
                                             >❯</a>
@@ -234,45 +402,77 @@ import {catchEmAll, url} from "./fetch.js";
 
                                 </div>
 
-                                <div class="flex flex-row justify-evenly items-center py-3 overflow-none">
-                                    <p class="inline text-gray mx-4 bg-gray-200 rounded px-4 py-1">Height: ${(height*0.1).toFixed(2)} m</p>
-                                    <p class="inline text-gray mx-4 bg-gray-200 rounded px-4 py-1">Weight: ${weight/10} kg</p>
+                                <div class="flex flex-col justify-evenly items-center py-3 overflow-none">
+
+                                    <div class="flex flex-row justify-center items-center py-3">
+
+                                        <div class="flex flex-col justify-center items-center rounded-l text-center max-w-[200px] gap-2">
+                                            <p class=" min-w-[150px] font-bold text-[var(--main-bg)] bg-[var(--second-bg)] px-4 py-1 border-[var(--second-bg)] border-solid border-y-2">${item.stats[0].stat.name}</p>
+                                            <p class=" min-w-[150px] font-bold text-[var(--main-bg)] bg-[var(--second-bg)] px-4 py-1 border-[var(--second-bg)] border-solid border-y-2">${item.stats[1].stat.name}</p>
+                                            <p class=" min-w-[150px] font-bold text-[var(--main-bg)] bg-[var(--second-bg)] px-4 py-1 border-[var(--second-bg)] border-solid border-y-2">${item.stats[2].stat.name}</p>
+                                            <p class=" min-w-[150px] font-bold text-[var(--main-bg)] bg-[var(--second-bg)] px-4 py-1 border-[var(--second-bg)] border-solid border-y-2">${item.stats[3].stat.name}</p>
+                                            <p class=" min-w-[150px] font-bold text-[var(--main-bg)] bg-[var(--second-bg)] px-4 py-1 border-[var(--second-bg)] border-solid border-y-2">${item.stats[4].stat.name}</p>
+                                            <p class=" min-w-[150px] font-bold text-[var(--main-bg)] bg-[var(--second-bg)] px-4 py-1 border-[var(--second-bg)] border-solid border-y-2">${item.stats[5].stat.name}</p>
+                                        </div>
+
+                                        <div class="flex flex-col justify-center items-center rounded-r overflow-hidden max-w-[200px] gap-2">
+
+                                            <div class="min-w-[150px] w-full rounded-r border-solid border-y-2 border-r-2 border-green-900 bg-blue-100" title='Effort: ${item.stats[0].effort}'>
+                                                <span class="b inline-block bg-gradient-to-r from-green-700 via-34% via-green-500 via-33% to-green-400 via-33% w-[${(item.stats[0].base_stat)*1.5}px] text-gray-200 h-full px-4 py-1 font-bold" id="${item.stats[0].stat.name}"> 
+                                                    ${item.stats[0].base_stat}
+                                                </span>
+                                            </div>
+                                            
+                                            <div class="min-w-[150px] w-full rounded-r border-solid border-y-2 border-r-2 border-green-900 bg-blue-100" title='Effort: ${item.stats[1].effort}'>
+                                                <span class=" inline-block bg-gradient-to-r from-green-700 via-34% via-green-500 via-33% to-green-400 via-33% w-[${(item.stats[1].base_stat)*1.5}px] text-gray-200 h-full px-4 py-1 font-bold" id="${item.stats[1].stat.name}"> 
+                                                    ${item.stats[1].base_stat}
+                                                </span>
+                                            </div>
+
+                                                                        
+                                            <div class="min-w-[150px] w-full rounded-r border-solid border-y-2 border-r-2 border-green-900 bg-blue-100" title='Effort: ${item.stats[2].effort}'>
+                                                <span class=" inline-block bg-gradient-to-r from-green-700 via-34% via-green-500 via-33% to-green-400 via-33% w-[${(item.stats[2].base_stat)*1.5}px] text-gray-200 h-full px-4 py-1 font-bold" id="${item.stats[2].stat.name}"> 
+                                                    ${item.stats[2].base_stat}
+                                                </span>
+                                            </div>
+                                        
+                                                                        
+                                            <div class="min-w-[150px] w-full rounded-r border-solid border-y-2 border-r-2 border-green-900 bg-blue-100" title='Effort: ${item.stats[3].effort}'>
+                                                <span class=" inline-block bg-gradient-to-r from-green-700 via-34% via-green-500 via-33% to-green-400 via-33% w-[${(item.stats[3].base_stat)*1.5}px] text-gray-200 h-full px-4 py-1 font-bold" id="${item.stats[3].stat.name}"> 
+                                                    ${item.stats[3].base_stat}
+                                                </span>
+                                            </div>
+                                        
+                                                                        
+                                            <div class="min-w-[150px] w-full rounded-r border-solid border-y-2 border-r-2 border-green-900 bg-blue-100" title='Effort: ${item.stats[4].effort}'>
+                                                <span class=" inline-block bg-gradient-to-r from-green-700 via-34% via-green-500 via-33% to-green-400 via-33% w-[${(item.stats[4].base_stat)*1.5}px] text-gray-200 h-full px-4 py-1 font-bold" id="${item.stats[4].stat.name}"> 
+                                                    ${item.stats[4].base_stat}
+                                                </span>
+                                            </div>
+                                        
+                                                                        
+                                            <div class="min-w-[150px] w-full rounded-r border-solid border-y-2 border-r-2 border-green-900 bg-blue-100" title='Effort: ${item.stats[5].effort}'>
+                                                <span class=" inline-block bg-gradient-to-r from-green-700 via-34% via-green-500 via-33% to-green-400 via-33% w-[${(item.stats[5].base_stat)*1.5}px] text-gray-200 h-full px-4 py-1 font-bold" id="${item.stats[5].stat.name}"> 
+                                                    ${item.stats[5].base_stat}
+                                                </span>
+                                            </div>
+                                    
+                                        </div>
+
+                                    </div>
                                 </div>
 
                             </div>
 
-                        <!--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COL ABILITIES AND STATS ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■-->
+                        <!--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COL ABILITIES ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■-->
 
-                            <div class="flex flex-col justify-evenly items-center py-3">
+                            <div class="flex flex-col justify-evenly items-center p-3">
 
-                                <div class="flex flex-row justify-center items-center py-3 w-full">
+                                <div class="flex flex-col justify-center items-baseline p-3 w-full">
 
-                                    <div class="flex flex-col justify-center items-center">
+                                    <h2 id='abilitiesTitle' class="text-[2rem] m-2 mx-4 cursor-pointer ease-in"> &#x21E8 Abilities: </h2>
+                                    <div id='abilitiesContent' class="flex flex-col justify-center items-center ease-in hidden">
                                         ${await abilitiesSection(item.abilities)}
-                                    </div>
-
-                                </div>
-
-                                <h2 class="text-[2rem] m-2 mx-4"> Base Stats: </h2>
-
-                                <div class="flex flex-row justify-center items-center py-3">
-
-                                    <div class="flex flex-col justify-center items-center py-3">
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.stats[0].stat.name}</p>
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.stats[1].stat.name}</p>
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.stats[2].stat.name}</p>
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.stats[3].stat.name}</p>
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.stats[4].stat.name}</p>
-                                        <p class=" min-w-[11rem] text-gray ml-4 bg-gray-200 px-4 py-1">${item.stats[5].stat.name}</p>
-                                    </div>
-
-                                    <div class="flex flex-col justify-center items-center py-3">
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[0].base_stat} </p>
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[1].base_stat} </p>
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[2].base_stat} </p>
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[3].base_stat} </p>
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[4].base_stat} </p>
-                                        <p class=" min-w-[11rem] text-gray mr-4 bg-gray-200  px-5 py-1">${item.stats[5].base_stat} </p>
                                     </div>
 
                                 </div>
@@ -281,33 +481,58 @@ import {catchEmAll, url} from "./fetch.js";
 
                         <!--■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ COL MOVES ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■-->
                            
-                            <div class="flex flex-col self-start items-center py-3 w-full">
+                            <div class="flex flex-col justify-evenly items-center p-3 w-full">
 
-                                <div class="flex flex-row justify-center items-center py-3 w-full">
+                                <div class="flex flex-col justify-center items-baseline p-3 w-full">
 
-                                    <div class="flex flex-col justify-center items-center w-full">
-                                        ${await movesSection(item.moves)}
+                                    <h2 id='movesTitleLevel' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E8 Moves (by Level): </h2>
+                                    <div id='movesContentLevel' class="flex flex-col justify-center items-center w-full ease-in hidden">
+                                        <div class="grid grid-cols-2 md:grid-cols-3 md: gap-1 justify-center items-center w-full ease-in ">
+                                            ${(await movesSection(item.moves))[0]}
+                                        </div>
                                     </div>
+
+                                    ${(await movesSection(item.moves))[1].length>0 ? 
+                                    `<h2 id='movesTitleMachine' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E8 Moves (by MT/MO): </h2>
+                                    <div id='movesContentMachine' class="flex flex-col justify-center items-center w-full ease-in hidden">
+                                        <div class="grid grid-cols-2 md:grid-cols-3 md: gap-1 justify-center items-center w-full ease-in ">
+                                            ${(await movesSection(item.moves))[1]}
+                                        </div>
+                                    </div>` : `<div id='movesTitleMachine' class='hidden'></div>`}
+
+                                    ${(await movesSection(item.moves))[2].length>0 ? 
+                                    `<h2 id='movesTitleEgg' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E8 Moves (by Egg): </h2>
+                                    <div id='movesContentEgg' class="flex flex-col justify-center items-center w-full ease-in hidden">
+                                        <div class="grid grid-cols-2 md:grid-cols-3 md: gap-1 justify-center items-center w-full ease-in ">
+                                            ${(await movesSection(item.moves))[2]}
+                                        </div>
+                                    </div>` :`<div id='movesTitleEgg' class='hidden'></div>`}
+
+                                    ${(await movesSection(item.moves))[3].length>0 ? 
+                                    `<h2 id='movesTitleTutor' class="text-[2rem] m-2 mx-4 cursor-pointer"> &#x21E8 Moves (by Tutor): </h2>
+                                    <div id='movesContentTutor' class="flex flex-col justify-center items-center w-full ease-in hidden">
+                                        <div class="grid grid-cols-2 md:grid-cols-3 md: gap-1 justify-center items-center w-full ease-in ">
+                                            ${(await movesSection(item.moves))[3]}
+                                        </div>
+                                    </div>` : `<div id='movesTitleTutor' class='hidden'></div>`}
 
                                 </div>
                                 
                             </div>
-
                     </div>
         `;
 
         //box-shadow for dialog
         dialogWindow.classList.add("shadow-xl");
         dialogWindow.classList.add(`shadow-[var(--${item.types[0].type.name})]`);
-
+            
         return dialogBody;
     }
                 
     //assigning dialog event to cards after checking if fetching of data is complete via custom event
     document.addEventListener("allFetchLoaded", ()=> {
-        const pokemon=document.querySelectorAll('.pokemonCard');
-        console.log('dialogAssigned');
-        dialogForItems(pokemon, dialogBody);
+        const parentForListofPokemon=document.getElementById('display-list');
+        dialogForItems(parentForListofPokemon, dialogBody);
     });
 
 
@@ -389,8 +614,8 @@ document.addEventListener("dialogOpenedEvent", ()=> {
             imgNotLoading.removeEventListener('error', handleImageError);
         }
         
-            pokemonImgs.forEach((img) => {
-                img.addEventListener('error', handleImageError);
-            });
+        pokemonImgs.forEach((img) => {
+            img.addEventListener('error', handleImageError);
+        });
 });
 

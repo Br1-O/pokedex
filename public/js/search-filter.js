@@ -1,6 +1,7 @@
-//■■■■■■■■■■■■■■■■■■■■■■■■■■■ imported fx/var from fetch.js ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■//
+//■■■■■■■■■■■■■■■■■■■■■■■■■■■ imported fx/var ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■//
 
 import {catchEmAll, displayCards, url, allFetchLoaded} from "./fetch.js";
+import { loadingScreen } from "./effects.js";
 
 //■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■ filter function for nav-bar types buttons ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■//
 
@@ -43,6 +44,8 @@ const filterByCategory = async (fetchFunction,url,category,inputValues,start,end
 //■■■■■■■■■■■■■■■■■■■■■■■■■ function to displayIntoCards using a pre existing array of elements ■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■■//
 
 let type ='all';
+let isLoading=true;
+const containerList=document.getElementById('display-list');
 
 const displayPokemonQueryIntoCards = (array) => {
 
@@ -72,7 +75,7 @@ const displayPokemonQueryIntoCards = (array) => {
 
         //style of each card (the name.split and length check is because of some of the names delivered with extra words by the endpoint)
         body+=`
-            <article data-id="${item.id}" class="pokemonCard relative flex flex-col p-4 m-2 rounded bg-[var(--main-bg)] overflow-hidden items-center shadow-md shadow-black whitespace-nowrap z-1 hover:shadow-xl hover:shadow-[var(--${types[0].type.name})]">
+            <article title="Click to show all stats!" data-id="${item.id}" class="pokemonCard relative flex flex-col p-4 m-2 rounded bg-[var(--main-bg)] overflow-hidden items-center shadow-md shadow-black whitespace-nowrap z-1 hover:shadow-xl hover:shadow-[var(--${types[0].type.name})] ">
                 <p class="pokemon-card-id-back text-[14rem] sm:text-[8rem] md:text-[8rem] lg:text-[10rem]">#${id}</p>
                 <img class="pokemon-img min-w-[150px] min-h-[150px] w-2/3 h-1/3 shrink-0" src=${item.sprites.other['official-artwork'].front_default} alt="pokemon">
                 <div class="flex flex-row justify-center items-center overflow-hidden" data-id="${item.id}">
@@ -91,8 +94,8 @@ const displayPokemonQueryIntoCards = (array) => {
     });
 
     //append of whole body containing cards into the container
-    const containerList=document.getElementById('display-list');
     containerList.innerHTML=body;
+    isLoading=false;
     document.dispatchEvent(allFetchLoaded);
 }
 
@@ -104,17 +107,27 @@ allBtnType.forEach( (btn) => {
 
     if(btn.dataset.type!=="all"){
         btn.addEventListener('click', async () => {
+            isLoading=true;
             //setting global variable type so gen radio btns eventListener can filter based on the selected type value
             type=btn.dataset.type;
             //filtering by category also paying attention to the gen number checked
             let q= await filterByCategory(catchEmAll, url, "types", type, genCheckedValues()[0], genCheckedValues()[1]);
+
             //instantiation of displaying query into cards
             displayPokemonQueryIntoCards(q);
+
+            //Loading Animation
+            loadingScreen(isLoading,containerList);
         });
     }else{
         btn.addEventListener('click', async () => {
+            isLoading=true;
             type='all';
             displayCards(url, genCheckedValues()[0], genCheckedValues()[1]);
+
+            //Loading Animation
+            loadingScreen(isLoading,containerList);
+
         });
     }   
 });
@@ -154,9 +167,16 @@ allRadioGen.forEach( (btn) => {
         btn.addEventListener('click', async () => {
             if(type==="all"){
                 displayCards(url, (genCheckedValues())[0],(genCheckedValues())[1]);
+                //Loading Animation
+                loadingScreen(isLoading,containerList);
+
             }else{
                 let q= await filterByCategory(catchEmAll, url, "types", type, genCheckedValues()[0], genCheckedValues()[1]);
                 displayPokemonQueryIntoCards(q);
+
+                //Loading Animation
+                loadingScreen(isLoading,containerList);
+
             }
         });
 });
@@ -190,17 +210,32 @@ searchInput.addEventListener('keyup', async () => {
     if((inputValue!=='') && /\d/.test(inputValue)){
         displayCards(url,parseInt(inputValue),parseInt(inputValue)+1);
 
+        //Loading Animation
+        loadingScreen(isLoading,containerList);
+
     //search by name (check if input is not empty and if it contains letters)
     }else if((inputValue!=='') && /.*/.test(inputValue)){
         let q= await searchByName(url,inputValue,1,1011);
         displayPokemonQueryIntoCards(q);
+
+        //Loading Animation
+        loadingScreen(isLoading,containerList);
+
     }else{
         //if search input is empty it returns previous query display
         if(type==="all"){
             displayCards(url, (genCheckedValues())[0],(genCheckedValues())[1]);
+
+            //Loading Animation
+            loadingScreen(isLoading,containerList);
+
         }else{
             let q= await filterByCategory(catchEmAll, url, "types", type, genCheckedValues()[0], genCheckedValues()[1]);
             displayPokemonQueryIntoCards(q);
+
+            //Loading Animation
+            loadingScreen(isLoading,containerList);
+
         } 
     }
 });
